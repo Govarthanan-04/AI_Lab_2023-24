@@ -1,273 +1,86 @@
-# Ex.No: 12  Planning –  Monkey Banana Problem
-### DATE: 25/04/2024                                                                         
-### REGISTER NUMBER : 212221040049
-### AIM: 
+Ex.No: 12 Planning – Monkey Banana Problem
+DATE:17.04.2024
+REGISTER NUMBER : 212221040041
+AIM:
 To find the sequence of plan for Monkey Banana problem using PDDL Editor.
-###  Algorithm:
-Step 1:  Start the program <br> 
-Step 2 : Create a domain for Monkey Banana Problem. <br> 
-Step 3:  Create a domain by specifying predicates. <br> 
-Step 4: Specify the actions GOTO, CLIMB, PUSH-BOX, GET-KNIFE, GRAB-BANANAS in Monkey Banana problem.<br>  
-Step 5:   Define a problem for Monkey Banana problem.<br> 
-Step 6:  Obtain the plan for given problem.<br> 
-Step 7: Stop the program.<br> 
-### Program:
 
-#include <stdio.h>
-#include <stdlib.h>
+Algorithm:
+Step 1: Start the program
+Step 2 : Create a domain for Monkey Banana Problem.
+Step 3: Create a domain by specifying predicates.
+Step 4: Specify the actions GOTO, CLIMB, PUSH-BOX, GET-KNIFE, GRAB-BANANAS in Monkey Banana problem.
 
-#define TRUE 1
-#define FALSE 0
+Step 5: Define a problem for Monkey Banana problem.
+Step 6: Obtain the plan for given problem.
+Step 7: Stop the program.
 
-typedef struct Heap {
-    int data;
-    struct Heap *next;
-} node;
+Program:
+(define (domain monkey) 
+(:requirements :strips) 
+(:constants monkey box knife bananas glass waterfountain) 
+(:predicates (location ?x) 
+(on-floor) 
+(at ?m ?x) 
+(hasknife) 
+(onbox ?x) 
+(hasbananas) 
+(hasglass) 
+(haswater)) 
+;; movement and climbing 
+(:action GO-TO 
+:parameters (?x ?y)
+:precondition (and (location ?x) (location ?y) (on-floor) (at monkey ?y)) 
+:effect (and (at monkey ?x) (not (at monkey ?y)))) 
+(:action CLIMB 
+:parameters (?x) 
+:precondition (and (location ?x) (at box ?x) (at monkey ?x)) 
+:effect (and (onbox ?x) (not (on-floor)))) 
+(:action PUSH-BOX 
+:parameters (?x ?y) 
+:precondition (and (location ?x) (location ?y) (at box ?y) (at monkey ?y) 
+(on-floor)) 
+:effect (and (at monkey ?x) (not (at monkey ?y)) 
+(at box ?x)(not (at box ?y)))) 
+;; getting bananas 
+(:action GET-KNIFE 
+:parameters (?y) 
+:precondition (and (location ?y) (at knife ?y) (at monkey ?y)) 
+:effect (and (hasknife) (not (at knife ?y)))) 
+(:action GRAB-BANANAS 
+:parameters (?y) 
+:precondition (and (location ?y) (hasknife) 
+(at bananas ?y) (onbox ?y)) 
+:effect (hasbananas)) 
+;; getting water 
+(:action PICKGLASS 
+:parameters (?y) 
+:precondition (and (location ?y) (at glass ?y) (at monkey ?y)) 
+:effect (and (hasglass) (not (at glass ?y)))) 
+(:action GETWATER 
+:parameters (?y) 
+:precondition (and (location ?y) (hasglass) 
+(at waterfountain ?y)
+(at monkey ?y) 
+(onbox ?y)) 
+:effect (haswater)))
+Problem:
+(define (problem pb1) 
+(:domain monkey) 
+(:objects p1 p2 p3 p4 bananas monkey box knife) 
+(:init (location p1) 
+(location p2) 
+(location p3) 
+(location p4) 
+(at monkey p1) 
+(on-floor) 
+(at box p2) 
+(at bananas p3) 
+(at knife p4) 
+) 
+(:goal (and (hasbananas))) 
+)
+Output:
+https://private-user-images.githubusercontent.com/147976522/281797907-5eb89095-c5c6-4311-b548-c252ca7895f4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTUzNTg4NzgsIm5iZiI6MTcxNTM1ODU3OCwicGF0aCI6Ii8xNDc5NzY1MjIvMjgxNzk3OTA3LTVlYjg5MDk1LWM1YzYtNDMxMS1iNTQ4LWMyNTJjYTc4OTVmNC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTEwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUxMFQxNjI5MzhaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05ZWYzNTliOTYxMzU5NGUwYjM3NTRhOWUxZGVhNzJmOGE4MWNkZmFlYTY3Y2ZjZmVjODZkNjYyYWM5MGFiYjA4JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.6WRVT6n2jhN_-cvCFmPnS8um8c2zkNohaig25RAlzeI
 
-// Function prototypes
-node *create();
-void display(node *);
-node *search(node *, int);
-node *insert(node *);
-void dele(node **);
-node *get_node();
-node *insert_head(node *);
-node *insert_last(node *);
-void insert_after(node *);
-
-// Function definitions
-void dele(node **head) {
-    int key;
-    node *temp = *head;
-    node *prev = NULL;
-
-    if (temp == NULL) {
-        printf("\nThe list is empty\n");
-        return;
-    }
-
-    printf("\nEnter the element you want to delete: ");
-    scanf("%d", &key);
-
-    temp = search(*head, key);
-    if (temp != NULL) {
-        prev = *head;
-
-        if (prev->data == key) {
-            *head = temp->next;
-            free(temp);
-        } else {
-            while (prev->next != NULL && prev->next->data != key)
-                prev = prev->next;
-
-            if (prev->next != NULL) {
-                temp = prev->next;
-                prev->next = temp->next;
-                free(temp);
-            } else
-                printf("\nThe element is not found in the list\n");
-        }
-    }
-}
-
-node *get_node() {
-    node *temp = (node *)malloc(sizeof(node));
-    if (temp == NULL) {
-        printf("\nMemory allocation failed\n");
-        exit(1);
-    }
-    temp->next = NULL;
-    return temp;
-}
-
-node *create() {
-    node *temp, *New, *head = NULL;
-    int val;
-    char ans = 'y';
-    int flag = TRUE;
-
-    do {
-        printf("\nEnter the element: ");
-        scanf("%d", &val);
-
-        New = get_node();
-        if (New == NULL) {
-            printf("\nMemory allocation failed\n");
-            exit(1);
-        }
-
-        New->data = val;
-        New->next = NULL;
-
-        if (flag == TRUE) {
-            head = New;
-            temp = head;
-            flag = FALSE;
-        } else {
-            temp->next = New;
-            temp = New;
-        }
-
-        printf("\nDo you want to enter more elements? (y/n): ");
-        scanf(" %c", &ans);
-    } while (ans == 'y' || ans == 'Y');
-
-    printf("\nThe list is created\n");
-    return head;
-}
-
-void display(node *head) {
-    node *temp = head;
-
-    if (temp == NULL) {
-        printf("\nThe list is empty\n");
-        return;
-    }
-
-    printf("\n");
-    while (temp != NULL) {
-        printf("%d ", temp->data);
-        if (temp->next != NULL)
-            printf("-> ");
-        temp = temp->next;
-    }
-    printf("\n");
-}
-
-node *search(node *head, int key) {
-    node *temp = head;
-
-    if (temp == NULL) {
-        printf("\nThe linked list is empty\n");
-        return NULL;
-    }
-
-    while (temp != NULL) {
-        if (temp->data == key) {
-            printf("\nThe element is present in the list\nThe element is Deleted");
-            return temp;
-        }
-        temp = temp->next;
-    }
-
-    printf("\nThe element is not present in the list\n");
-    return NULL;
-}
-
-node *insert(node *head) {
-    int choice;
-    head = insert_head(head);
-    head = insert_last(head);
-    insert_after(head);
-    return head;
-}
-
-node *insert_head(node *head) {
-    int val;
-    node *New = get_node();
-
-    printf("\nEnter the element you want to insert: ");
-    scanf("%d", &val);
-    New->data = val;
-    New->next = head;
-
-    return New;
-}
-
-node *insert_last(node *head) {
-    int val;
-    node *New = get_node();
-    node *temp = head;
-
-    printf("\nEnter the element you want to insert: ");
-    scanf("%d", &val);
-    New->data = val;
-    New->next = NULL;
-
-    if (head == NULL)
-        head = New;
-    else {
-        while (temp->next != NULL)
-            temp = temp->next;
-        temp->next = New;
-    }
-
-    return head;
-}
-
-void insert_after(node *head) {
-    int key;
-    node *New = get_node();
-    node *temp = head;
-
-    printf("\nEnter the element after which you want to insert the node: ");
-    scanf("%d", &key);
-
-    while (temp != NULL) {
-        if (temp->data == key) {
-            printf("\nEnter the element you want to insert: ");
-            scanf("%d", &New->data);
-            New->next = temp->next;
-            temp->next = New;
-            return;
-        }
-        temp = temp->next;
-    }
-
-    printf("\nThe specified element is not found in the list\n");
-}
-
-int main() {
-    int choice;
-    node *head = NULL;
-
-    do {
-        printf("\nProgram to perform various operations on heap using dynamic memory management\n");
-        printf("1. Create\n");
-        printf("2. Display\n");
-        printf("3. Insert an element in the list\n");
-        printf("4. Delete an element from the list\n");
-        printf("5. Quit\n");
-        printf("Enter your choice (1-5): ");
-        scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                head = create();
-                break;
-            case 2:
-                display(head);
-                break;
-            case 3:
-                head = insert(head);
-                break;
-            case 4:
-                dele(&head);
-                break;
-            case 5:
-                printf("Exiting the program...\n");
-                exit(0);
-            default:
-                printf("Invalid choice, try again.\n");
-        }
-    } while (choice != 5);
-
-    return 0;
-}
-
-
-
-
-
-
-
-### Input 
-
-### Output/Plan:
-[![image](https://github.com/Govarthanan-04/AI_Lab_2023-24/assets/114642297/3bf98b22-60f7-4e9c-8c27-810953df9e55
-](https://private-user-images.githubusercontent.com/118344049/327941134-afad51a6-ae06-4db1-a631-a64c3cd422e5.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTUzNTg1NTcsIm5iZiI6MTcxNTM1ODI1NywicGF0aCI6Ii8xMTgzNDQwNDkvMzI3OTQxMTM0LWFmYWQ1MWE2LWFlMDYtNGRiMS1hNjMxLWE2NGMzY2Q0MjJlNS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTEwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUxMFQxNjI0MTdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03OTY3MGIxMGJjZmI5ZGJkZGI4ZTlkODhkM2Q3YzU4M2YzNGI3OTBhNDRmYjYwMzM5YWE1NmFiMDNmNDYwOGE3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.4j26Z-FkwWZ6YI-TLsifFddLMMbQF_yVk8LyOvNvXb4)
-
-
-
-### Result:
-Thus the plan was found for the initial and goal state of given problem.
+Result:
+Thus the plan was found for the initial and goal state of given problem.
