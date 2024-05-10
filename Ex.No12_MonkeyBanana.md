@@ -83,7 +83,8 @@ Problem :
   	(:goal (and (hasbananas)))
 )
 Output/Plan:
-https://private-user-images.githubusercontent.com/91734840/279587610-e0b14ce5-9295-4b5e-ab72-323b77764cdb.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTUzNTk3MDAsIm5iZiI6MTcxNTM1OTQwMCwicGF0aCI6Ii85MTczNDg0MC8yNzk1ODc2MTAtZTBiMTRjZTUtOTI5NS00YjVlLWFiNzItMzIzYjc3NzY0Y2RiLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA1MTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNTEwVDE2NDMyMFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTg2MTk4YzdiY2MwZTk3NDdhYmZmNDY2Y2VkMzEyOTBmMTdiNmYwODU0ZDVkMjA4NjIxNDczZGNmNmIwYTM3Y2UmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.s8bbNB2sBLdiAPXyRAE9rGxhMhQjZz3Hi1Y-5JaXtK0
+![WhatsApp Image 2024-05-10 at 22 17 47_d8f381c0](https://github.com/Govarthanan-04/AI_Lab_2023-24/assets/114642297/c0735d68-6a90-484f-8d67-4b023ebbefc9)
+
 
 Result:
-Thus the plan was found for the initial and goal state of given problem.
+Thus the plan was found for the initial and goal state of given problem.
